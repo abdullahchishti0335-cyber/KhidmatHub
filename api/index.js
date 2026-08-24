@@ -13,5 +13,12 @@ const initialize = () => {
 
 export default async function handler(req, res) {
   await initialize();
+
+  // The Vercel rewrite sends /api/:path* to this single function. Restore the
+  // original path so Express can match routes such as /api/v1/auth/register.
+  if (typeof req.query?.route === 'string' && req.query.route) {
+    req.url = `/api/${req.query.route}`;
+  }
+
   return app(req, res);
 }
