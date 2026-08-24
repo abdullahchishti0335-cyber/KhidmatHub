@@ -1,6 +1,7 @@
 {
   "name": "impacthub",
   "version": "1.0.0",
+  "type": "module",
   "description": "Saylani Community Impact Platform — Projects & Volunteer Management System",
   "scripts": {
     "server": "npm --prefix server start",

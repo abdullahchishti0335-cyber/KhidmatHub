@@ -28,10 +28,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const httpServer = http.createServer(app);
-
-// Initialize Socket.IO
-initSocket(httpServer);
 
 // Middleware
 app.use(cors({ origin: '*', credentials: true }));
@@ -71,6 +67,8 @@ const PORT = process.env.PORT || 5000;
 // Connect DB, Seed if needed, and Start Server
 const startServer = async () => {
   try {
+    const httpServer = http.createServer(app);
+    initSocket(httpServer);
     await connectDB();
     await seedDatabase();
 
@@ -86,4 +84,10 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Vercel imports this Express app through api/index.js. Only start a local
+// HTTP server when this file is run directly by Node.
+if (process.env.VERCEL !== '1') {
+  startServer();
+}
+
+export default app;
